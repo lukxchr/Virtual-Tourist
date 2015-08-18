@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="GFM-Ub-7p5">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -37,6 +37,7 @@
                             <outletCollection property="gestureRecognizers" destination="PqK-b4-1bh" appends="YES" id="ldS-NN-P4Q"/>
                         </connections>
                     </view>
+                    <navigationItem key="navigationItem" id="an9-Kg-0b9"/>
                     <connections>
                         <outlet property="mapView" destination="xsJ-TU-WLg" id="vpf-wW-KdH"/>
                     </connections>
@@ -48,6 +49,80 @@
                     </connections>
                 </pongPressGestureRecognizer>
             </objects>
+            <point key="canvasLocation" x="1071" y="177"/>
+        </scene>
+        <!--Photo Collection View Controller-->
+        <scene sceneID="sa2-Oe-lDT">
+            <objects>
+                <viewController storyboardIdentifier="PhotoCollectionViewController" id="qRj-pu-zjd" customClass="PhotoCollectionViewController" customModule="Virtual_Tourist" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="1Xp-QC-wFL"/>
+                        <viewControllerLayoutGuide type="bottom" id="GiU-Qq-UpP"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="oTr-yd-jMJ">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Eve-w1-fpu">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zib-MB-o5Y">
+                                <rect key="frame" x="277" y="93" width="46" height="30"/>
+                                <state key="normal" title="Button">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="refresh:" destination="qRj-pu-zjd" eventType="touchUpInside" id="4Dh-hb-nvG"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2KO-uF-UN6">
+                                <rect key="frame" x="16" y="550" width="46" height="30"/>
+                                <state key="normal" title="Button">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="printDocuments" destination="qRj-pu-zjd" eventType="touchUpInside" id="QvG-Vj-KWx"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Eve-w1-fpu" firstAttribute="top" secondItem="oTr-yd-jMJ" secondAttribute="topMargin" id="5Xb-dm-kMA"/>
+                            <constraint firstItem="zib-MB-o5Y" firstAttribute="centerX" secondItem="Eve-w1-fpu" secondAttribute="centerX" id="6F8-h4-Rjt"/>
+                            <constraint firstItem="Eve-w1-fpu" firstAttribute="leading" secondItem="2KO-uF-UN6" secondAttribute="trailing" constant="-62" id="U4s-hD-Txq"/>
+                            <constraint firstItem="Eve-w1-fpu" firstAttribute="leading" secondItem="oTr-yd-jMJ" secondAttribute="leadingMargin" constant="-16" id="bVG-tA-bWJ"/>
+                            <constraint firstItem="2KO-uF-UN6" firstAttribute="top" secondItem="Eve-w1-fpu" secondAttribute="bottom" constant="-50" id="d5f-Nc-tvJ"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Eve-w1-fpu" secondAttribute="trailing" constant="-16" id="dGA-hj-faK"/>
+                            <constraint firstItem="Eve-w1-fpu" firstAttribute="top" secondItem="zib-MB-o5Y" secondAttribute="bottom" constant="-123" id="n9O-Yz-oEU"/>
+                            <constraint firstItem="GiU-Qq-UpP" firstAttribute="top" secondItem="Eve-w1-fpu" secondAttribute="bottom" id="wmA-po-Xx3"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="d9c-FV-yAS"/>
+                    <connections>
+                        <outlet property="imageView" destination="Eve-w1-fpu" id="1LW-ru-bSl"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="09v-mH-2rI" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2313" y="1"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="qVu-Lp-j4c">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="GFM-Ub-7p5" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="rqc-ta-RZ7">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="vXZ-lx-hvc" kind="relationship" relationship="rootViewController" id="mDC-xe-geq"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ajb-cP-FZ5" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="259" y="177"/>
         </scene>
     </scenes>
 </document>

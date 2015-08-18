@@ -18,32 +18,80 @@ class TravelLocationsMapView: UIViewController, MKMapViewDelegate {
     
     
     @IBOutlet weak var mapView: MKMapView!
-//    var mapRegion: MKCoordinateRegion {
-//        return mapView.region
-//    }
-    
-//    var mapRegionFilePath : String {
-//        let manager = NSFileManager.defaultManager()
-//        let url = manager.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first as! NSURL
-//        return url.URLByAppendingPathComponent("mapRegion").path!
-//    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
         mapView.delegate = self
         loadMapRegion()
-        //println(mapRegionFilePath)
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
+        
+        //debug
+        //FlickrAPIClient.getPhotosForCoordinate(latitude: 40.7449848176185, longitude: -74.0517848356299)
+        
+        // We need just to get the documents folder url
+        let documentsUrl =  NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0] as! NSURL
+        
+        // now lets get the directory contents (including folders)
+        if let directoryContents =  NSFileManager.defaultManager().contentsOfDirectoryAtPath(documentsUrl.path!, error: nil) {
+            //println(directoryContents)
+        }
+        // if you want to filter the directory contents you can do like this:
+        if let directoryUrls =  NSFileManager.defaultManager().contentsOfDirectoryAtURL(documentsUrl, includingPropertiesForKeys: nil, options: NSDirectoryEnumerationOptions.SkipsSubdirectoryDescendants, error: nil) {
+            //println(directoryUrls)
+        }
     }
     
-    func mapView(mapView: MKMapView!, didSelectAnnotationView view: MKAnnotationView!) {
-        println("selected \(view.annotation.coordinate.latitude)")
+    //MARK: mapView delegate methods
+    
+    func mapView(mapView: MKMapView!, viewForAnnotation annotation: MKAnnotation!) -> MKAnnotationView! {
+        if let annotation = annotation as? Pin {
+            let identifier = "pin"
+            let view: MKPinAnnotationView
+            if let deququedView = mapView.dequeueReusableAnnotationViewWithIdentifier(identifier) as? MKPinAnnotationView {
+                deququedView.annotation = annotation
+                view = deququedView
+            } else {
+                view = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+                view.pinColor = .Purple
+                view.animatesDrop = true
+            }
+            return view
+        }
+        return nil
     }
+
+    
+    func mapView(mapView: MKMapView!, didSelectAnnotationView view: MKAnnotationView!) {
+        println("selected at: \(view.annotation.coordinate.latitude) -- \(view.annotation.coordinate.longitude)")
+        
+        //deselct so that this method gets called again if user goes back from photo collection
+        //and clicks on the same annotation view
+        mapView.deselectAnnotation(view.annotation, animated: false)
+        let vc = self.storyboard?.instantiateViewControllerWithIdentifier("PhotoCollectionViewController") as! PhotoCollectionViewController
+        
+        
+        FlickrAPIClient.getPhotosForCoordinate(latitude: view.annotation.coordinate.latitude, longitude: view.annotation.coordinate.longitude)
+        
+//        let data = FlickrAPIClient.debugData
+//        //let img = UIImage(contentsOfFile: "19932562451_0895c2e8eb.jpg")
+//        println("data is nil: \(data == nil)")
+//        if let data = data {
+//            let img = UIImage(data: data)
+//            vc.imageView.image = img
+//        }
+        
+        
+        
+        
+        
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+//    func mapView(mapView: MKMapView!, didDeselectAnnotationView view: MKAnnotationView!) {
+//        println("deselected \(view.annotation.coordinate.latitude)")
+//        
+//    }
+    
     
     func mapView(mapView: MKMapView!, regionDidChangeAnimated animated: Bool) {
         saveMapRegion()
@@ -52,7 +100,7 @@ class TravelLocationsMapView: UIViewController, MKMapViewDelegate {
     
     
     @IBAction func handleLongPress(sender: UILongPressGestureRecognizer) {
-        println("Long tap detected!")
+        //println("Long tap detected!")
         
 //        let touchPoint = sender.locationInView(self.mapView)
 //        let mapLocation = mapView.convertPoint(touchPoint, toCoordinateFromView: self.mapView)
@@ -64,15 +112,18 @@ class TravelLocationsMapView: UIViewController, MKMapViewDelegate {
         switch sender.state {
         case .Changed: fallthrough
         case .Ended:
-            println("_Long tap detected!")
+            //println("_Long tap detected!")
             let touchPoint = sender.locationInView(self.mapView)
             let mapLocation = mapView.convertPoint(touchPoint, toCoordinateFromView: self.mapView)
             
-            let newAnnotation = MKPointAnnotation()
+            //let newAnnotation = MKPointAnnotation()
+            let newAnnotation = Pin(coordinate: mapLocation)
+            //let newAnnotation = MKPinAnnotationView()
             newAnnotation.coordinate = mapLocation
             mapView.addAnnotation(newAnnotation)
         default: break
         }
+        
     }
     
     private func saveMapRegion() {
@@ -93,7 +144,7 @@ class TravelLocationsMapView: UIViewController, MKMapViewDelegate {
     private func loadMapRegion() {
         let defaults = NSUserDefaults.standardUserDefaults()
         
-        //use objectForKey (returns nil if key doesn't exist)and as? instead of doubleForKey (throws expecption)
+        //use objectForKey (returns nil if key doesn't exist) instead of doubleForKey (throws expecption)
         if let centerLatitude = defaults.objectForKey("centerLatitude") as? Double,
             centerLongitude = defaults.objectForKey("centerLongitude") as? Double,
             latitudeDelta = defaults.objectForKey("latitudeDelta") as? Double,
@@ -102,11 +153,8 @@ class TravelLocationsMapView: UIViewController, MKMapViewDelegate {
                     center: CLLocationCoordinate2D(latitude: centerLatitude, longitude: centerLongitude),
                     span: MKCoordinateSpanMake(latitudeDelta, longitudeDelta))
         }
-        
-        
-        
     }
-
+    
 
 }
 
