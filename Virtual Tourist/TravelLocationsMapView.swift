@@ -33,7 +33,7 @@ class TravelLocationsMapView: UIViewController, MKMapViewDelegate {
         
         // now lets get the directory contents (including folders)
         if let directoryContents =  NSFileManager.defaultManager().contentsOfDirectoryAtPath(documentsUrl.path!, error: nil) {
-            //println(directoryContents)
+            println("documents count: \(directoryContents.count)")
         }
         // if you want to filter the directory contents you can do like this:
         if let directoryUrls =  NSFileManager.defaultManager().contentsOfDirectoryAtURL(documentsUrl, includingPropertiesForKeys: nil, options: NSDirectoryEnumerationOptions.SkipsSubdirectoryDescendants, error: nil) {
@@ -62,28 +62,12 @@ class TravelLocationsMapView: UIViewController, MKMapViewDelegate {
 
     
     func mapView(mapView: MKMapView!, didSelectAnnotationView view: MKAnnotationView!) {
-        println("selected at: \(view.annotation.coordinate.latitude) -- \(view.annotation.coordinate.longitude)")
-        
         //deselct so that this method gets called again if user goes back from photo collection
         //and clicks on the same annotation view
         mapView.deselectAnnotation(view.annotation, animated: false)
+        
         let vc = self.storyboard?.instantiateViewControllerWithIdentifier("PhotoCollectionViewController") as! PhotoCollectionViewController
-        
-        
-        FlickrAPIClient.getPhotosForCoordinate(latitude: view.annotation.coordinate.latitude, longitude: view.annotation.coordinate.longitude)
-        
-//        let data = FlickrAPIClient.debugData
-//        //let img = UIImage(contentsOfFile: "19932562451_0895c2e8eb.jpg")
-//        println("data is nil: \(data == nil)")
-//        if let data = data {
-//            let img = UIImage(data: data)
-//            vc.imageView.image = img
-//        }
-        
-        
-        
-        
-        
+        vc.pin = view.annotation as! Pin
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -117,9 +101,11 @@ class TravelLocationsMapView: UIViewController, MKMapViewDelegate {
             let mapLocation = mapView.convertPoint(touchPoint, toCoordinateFromView: self.mapView)
             
             //let newAnnotation = MKPointAnnotation()
-            let newAnnotation = Pin(coordinate: mapLocation)
+            let latitude = mapLocation.latitude
+            let longitude = mapLocation.longitude
+            let newAnnotation = Pin(latitude: latitude, longitude: longitude)
             //let newAnnotation = MKPinAnnotationView()
-            newAnnotation.coordinate = mapLocation
+            //newAnnotation.coordinate = mapLocation
             mapView.addAnnotation(newAnnotation)
         default: break
         }
@@ -152,6 +138,18 @@ class TravelLocationsMapView: UIViewController, MKMapViewDelegate {
                 mapView.region = MKCoordinateRegion(
                     center: CLLocationCoordinate2D(latitude: centerLatitude, longitude: centerLongitude),
                     span: MKCoordinateSpanMake(latitudeDelta, longitudeDelta))
+        }
+    }
+    
+    
+    @IBAction func del(sender: AnyObject) {
+//        NSFileManager.defaultManager().removeItemAtPath(path, error: nil)
+        
+        let documentsUrl =  NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0] as! NSURL
+        
+        // now lets get the directory contents (including folders)
+        if let directoryContents =  NSFileManager.defaultManager().contentsOfDirectoryAtPath(documentsUrl.path!, error: nil) {
+            println("documents count: \(directoryContents.count)")
         }
     }
     

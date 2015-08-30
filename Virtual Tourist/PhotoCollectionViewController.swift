@@ -8,11 +8,16 @@
 
 import Foundation
 import UIKit
+//d
+import Alamofire
 
-class PhotoCollectionViewController: UIViewController
+class PhotoCollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, PinDelegate
 {
     
-    @IBOutlet weak var imageView: UIImageView!
+    var pin: Pin!
+    
+    @IBOutlet weak var collectionView: UICollectionView!
+    
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
@@ -23,36 +28,112 @@ class PhotoCollectionViewController: UIViewController
         super.viewWillDisappear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
     }
-    
-    @IBAction func refresh(sender: UIButton) {
-        var url = FlickrAPIClient.debugURL ?? ""
-        if arc4random_uniform(10) > 5 {
-            url = "invalid_url"
-        }
-        //let img = UIImage(contentsOfFile: "19932562451_0895c2e8eb.jpg")
-        let photo = Photo(downloadURL: url, imageView: imageView)
-        //photo.request.cancel()
-        //imageView.image = photo.image!
-//        println("data is nil: \(data == nil)")
-//        if let data = data {
-//            let img = UIImage(data: data)
-//            imageView.image = img
-//        }
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        pin.delegate = self
     }
     
-    @IBAction func printDocuments() {
-        // We need just to get the documents folder url
-        let documentsUrl =  NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0] as! NSURL
+    // MARK: - UICollectionView
+    
+    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+        return 1
+//        return self.fetchedResultsController.sections?.count ?? 0
+    }
+    
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return pin.pictures.count
         
-        // now lets get the directory contents (including folders)
-        if let directoryContents =  NSFileManager.defaultManager().contentsOfDirectoryAtPath(documentsUrl.path!, error: nil) {
-            println(directoryContents)
+    }
+    
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        
+        
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("PhotoCell", forIndexPath: indexPath) as! PhotoCell
+        
+      
+        configureCell(cell, withPicture: pin.pictures[indexPath.indexAtPosition(1)])
+        
+        
+        return cell
+    }
+    
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        println("selected cell at indexPath=\(indexPath)")
+        //collectionView.deleteItemsAtIndexPaths([indexPath])
+        //deleteCell(atIndex: indexPath)
+        self.countDocuments()
+        self.pin.pictures[indexPath.indexAtPosition(1)].image = nil
+        self.pin.pictures.removeAtIndex(indexPath.indexAtPosition(1))
+        self.countDocuments()
+    }
+    
+    
+    // MARK: - Configure Cell
+    
+    func configureCell(cell: PhotoCell, withPicture picture: Picture) {
+        
+//        println("configureCell thr_m: \(NSThread.isMainThread())")
+    
+        
+//        cell.imageView.image = UIImage.imageWithColor(UIColor.grayColor())
+        
+        
+        if let localImage = picture.image {
+            cell.imageView.image = localImage
         }
-        // if you want to filter the directory contents you can do like this:
-        if let directoryUrls =  NSFileManager.defaultManager().contentsOfDirectoryAtURL(documentsUrl, includingPropertiesForKeys: nil, options: NSDirectoryEnumerationOptions.SkipsSubdirectoryDescendants, error: nil) {
-            println(directoryUrls)
+        else if picture.imagePath == nil || picture.imagePath == "" {
+            cell.imageView.image = UIImage.imageWithColor(UIColor.grayColor())
         }
+        else {
+            //set placeholder while the image is being downloaded
+            cell.imageView.image = UIImage.imageWithColor(UIColor.grayColor())
+            cell.activityIndicator.startAnimating()
+            
+            let downloadURL = picture.downloadURL
+            
+            let request = FlickrAPIClient.sharedInstance.getImageDataForFlickrURL(downloadURL) {
+                (data, _) in
+                if data == nil { return }
+                let image = UIImage(data: data!)
+                picture.image = image //stores on the disk
+                cell.imageView.image = image
+                cell.activityIndicator.stopAnimating()
+          
+            }
+            cell.requestToCancel = request
+
+        }
+        
+        
+//        cell.imageView.image = UIImage.imageWithColor(UIColor.blackColor())
+        
+    }
+    
+    
+    @IBAction func newCollection(sender: UIBarButtonItem) {
+        
+        //self.pin.pictures = [Picture]()
+        //self.collectionView.reloadData()
+        //println("_newCollection_: \(NSThread.currentThread())")
+        
+        FlickrAPIClient.sharedInstance.getPhotosForCoordinate(latitude: self.pin.latitude, longitude: self.pin.longitude) {
+            (urls, error) in
+            self.pin.pictures = urls.map({Picture(downloadURL: $0)})
+            //self.collectionView.reloadData()
+            
+        }
+    }
+    
+    func pin(pin: Pin, didUpdatePictures pictures: [Picture]) {
+        self.collectionView.reloadData()
+        println("didUpdatePictures delegate method called")
+    }
+    
+    
+    @IBAction func re(sender: AnyObject) {
+        println("first one in pictures array: \(self.pin?.pictures[0])")
+        collectionView.reloadData()
     }
     
     
