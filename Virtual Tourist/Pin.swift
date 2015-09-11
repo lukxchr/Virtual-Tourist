@@ -26,11 +26,12 @@ class Pin: NSObject, MKAnnotation {
     
     var latitude: Double
     var longitude: Double
-    var pictures = [Picture]() {
-        didSet {
-            delegate?.pin(self, didUpdatePictures: pictures)
-        }
-    }
+    var pictures = [Picture]()
+//        {
+//        didSet {
+//            delegate?.pin(self, didUpdatePictures: pictures)
+//        }
+//    }
     
     init(latitude: Double, longitude: Double) {
         //self.coordinate = coordinate
@@ -40,8 +41,24 @@ class Pin: NSObject, MKAnnotation {
         
         FlickrAPIClient.sharedInstance.getPhotosForCoordinate(latitude: latitude, longitude: longitude) {
             (urls, error) in
-            self.pictures = urls.map({Picture(downloadURL: $0)})
+            let pictures = urls.map({Picture(downloadURL: $0)})
+            self.setPicturesArray(pictures)
         }
+    }
+    
+    func setPicturesArray(pictures: [Picture]) {
+        self.pictures = pictures
+        delegate?.pin(self, didUpdatePictures: pictures)
+    }
+    
+    func removePicture(atIndexPath indexPath: NSIndexPath) {
+        let ix = indexPath.indexAtPosition(1)
+        
+        //setting image to nil will remove the file from Documents dir
+        pictures[ix].image = nil
+        
+        pictures.removeAtIndex(ix)
+        delegate?.pin(self, didUpdatePictures: pictures)
     }
 }
 

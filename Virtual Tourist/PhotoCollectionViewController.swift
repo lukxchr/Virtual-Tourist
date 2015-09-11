@@ -63,8 +63,9 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDataSourc
         //collectionView.deleteItemsAtIndexPaths([indexPath])
         //deleteCell(atIndex: indexPath)
         self.countDocuments()
-        self.pin.pictures[indexPath.indexAtPosition(1)].image = nil
-        self.pin.pictures.removeAtIndex(indexPath.indexAtPosition(1))
+        self.pin.removePicture(atIndexPath: indexPath)
+//        self.pin.pictures[indexPath.indexAtPosition(1)].image = nil
+//        self.pin.pictures.removeAtIndex(indexPath.indexAtPosition(1))
         self.countDocuments()
     }
     
@@ -119,7 +120,8 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDataSourc
         
         FlickrAPIClient.sharedInstance.getPhotosForCoordinate(latitude: self.pin.latitude, longitude: self.pin.longitude) {
             (urls, error) in
-            self.pin.pictures = urls.map({Picture(downloadURL: $0)})
+            let pictures = urls.map({Picture(downloadURL: $0)})
+            self.pin.setPicturesArray(pictures)
             //self.collectionView.reloadData()
             
         }
