@@ -27,11 +27,7 @@ class Pin: NSObject, MKAnnotation {
     var latitude: Double
     var longitude: Double
     var pictures = [Picture]()
-//        {
-//        didSet {
-//            delegate?.pin(self, didUpdatePictures: pictures)
-//        }
-//    }
+
     
     init(latitude: Double, longitude: Double) {
         //self.coordinate = coordinate

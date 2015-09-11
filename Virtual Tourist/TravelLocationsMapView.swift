@@ -8,9 +8,8 @@
 
 import UIKit
 import MapKit
-//debug
-import Alamofire
-import SwiftyJSON
+import CoreData
+
 
 
 
@@ -18,12 +17,19 @@ class TravelLocationsMapView: UIViewController, MKMapViewDelegate {
     
     
     @IBOutlet weak var mapView: MKMapView!
+    
+    var sharedContext: NSManagedObjectContext {
+        return CoreDataStackManager.sharedInstance().managedObjectContext!
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.delegate = self
         loadMapRegion()
         self.navigationController?.setNavigationBarHidden(true, animated: true)
+        
+        
+        sharedContext
         
         //debug
         //FlickrAPIClient.getPhotosForCoordinate(latitude: 40.7449848176185, longitude: -74.0517848356299)
