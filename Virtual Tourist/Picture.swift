@@ -9,18 +9,29 @@
 import Foundation
 import UIKit
 import Alamofire
+import CoreData
 
-class Picture: Printable {
+@objc(Picture)
+
+class Picture: NSManagedObject, Printable {
     
     
-    var imagePath: String?
-    var pin: Pin?
+    @NSManaged var imagePath: String?
+    @NSManaged var pin: Pin?
     
-    init(downloadURL: String) {
+    override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
+        super.init(entity: entity, insertIntoManagedObjectContext: context)
+    }
+    
+    init(downloadURL: String, context: NSManagedObjectContext) {
         //self.imagePath = imagePath
+        
+        let entity =  NSEntityDescription.entityForName("Picture", inManagedObjectContext: context)!
+        
+        super.init(entity: entity,insertIntoManagedObjectContext: context)
+        
         let uniqueIdentifier = FlickrAPIClient.identifierFromDownloadURL(downloadURL)
         imagePath = "/\(uniqueIdentifier)"
-        
     }
     
 //    init(identifier: String) {
@@ -37,9 +48,9 @@ class Picture: Printable {
         return ""
     }
     
-    var description: String {
-        return imagePath ?? "no path"
-    }
+//    var description: String {
+//        return imagePath ?? "no path"
+//    }
     
     
     var image: UIImage? {

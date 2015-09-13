@@ -8,13 +8,17 @@
 
 import Foundation
 import UIKit
-//d
-import Alamofire
+import CoreData
 
 class PhotoCollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, PinDelegate
 {
     
     var pin: Pin!
+    
+    var sharedContext: NSManagedObjectContext {
+        return CoreDataStackManager.sharedInstance().managedObjectContext!
+    }
+
     
     @IBOutlet weak var collectionView: UICollectionView!
     
@@ -120,7 +124,7 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDataSourc
         
         FlickrAPIClient.sharedInstance.getPhotosForCoordinate(latitude: self.pin.latitude, longitude: self.pin.longitude) {
             (urls, error) in
-            let pictures = urls.map({Picture(downloadURL: $0)})
+            let pictures = urls.map({Picture(downloadURL: $0, context: self.sharedContext)})
             self.pin.setPicturesArray(pictures)
             //self.collectionView.reloadData()
             

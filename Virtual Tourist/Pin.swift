@@ -8,6 +8,7 @@
 
 import UIKit
 import MapKit
+import CoreData
 
 protocol PinDelegate
 {
@@ -15,8 +16,9 @@ protocol PinDelegate
     func pin(pin: Pin, didUpdatePictures pictures: [Picture])
 }
 
+@objc(Pin)
 
-class Pin: NSObject, MKAnnotation {
+class Pin: NSManagedObject, MKAnnotation {
     
     var coordinate: CLLocationCoordinate2D {
         return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
@@ -24,22 +26,30 @@ class Pin: NSObject, MKAnnotation {
     
     var delegate: PinDelegate?
     
-    var latitude: Double
-    var longitude: Double
-    var pictures = [Picture]()
+    @NSManaged var latitude: Double
+    @NSManaged var longitude: Double
+    @NSManaged var pictures: [Picture]
 
+    override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
+        super.init(entity: entity, insertIntoManagedObjectContext: context)
+    }
     
-    init(latitude: Double, longitude: Double) {
-        //self.coordinate = coordinate
+    
+    init(latitude: Double, longitude: Double, context: NSManagedObjectContext) {
+        
+        
+        let entity =  NSEntityDescription.entityForName("Pin", inManagedObjectContext: context)!
+      
+        super.init(entity: entity,insertIntoManagedObjectContext: context)
+        
         self.latitude = latitude
         self.longitude = longitude
-        super.init()
         
-        FlickrAPIClient.sharedInstance.getPhotosForCoordinate(latitude: latitude, longitude: longitude) {
-            (urls, error) in
-            let pictures = urls.map({Picture(downloadURL: $0)})
-            self.setPicturesArray(pictures)
-        }
+//    FlickrAPIClient.sharedInstance.getPhotosForCoordinate(latitude: latitude, longitude: longitude) {
+//            (urls, error) in
+//            let pictures = urls.map({Picture(downloadURL: $0)})
+//            self.setPicturesArray(pictures)
+//        }
     }
     
     func setPicturesArray(pictures: [Picture]) {

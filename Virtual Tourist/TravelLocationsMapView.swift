@@ -29,23 +29,14 @@ class TravelLocationsMapView: UIViewController, MKMapViewDelegate {
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         
         
-        sharedContext
+        //MARK: next line throws an exception (alternatively comment next 2 lines out and try droping a pin on the map (long press))
+//        2015-09-13 20:40:28.712 Virtual Tourist[8637:47192] *** Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: 'Unacceptable type of value for attribute: property = "longitude"; desired type = NSNumber; given type = __NSCFString; value = latitude.'
+        let pin1 = Pin(latitude: 40.744, longitude: -74.0517, context: sharedContext)
+        mapView.addAnnotation(pin1)
         
-        //debug
-        //FlickrAPIClient.getPhotosForCoordinate(latitude: 40.7449848176185, longitude: -74.0517848356299)
         
-        // We need just to get the documents folder url
-        let documentsUrl =  NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0] as! NSURL
         
-        // now lets get the directory contents (including folders)
-        if let directoryContents =  NSFileManager.defaultManager().contentsOfDirectoryAtPath(documentsUrl.path!, error: nil) {
-            println("documents count: \(directoryContents.count)")
         }
-        // if you want to filter the directory contents you can do like this:
-        if let directoryUrls =  NSFileManager.defaultManager().contentsOfDirectoryAtURL(documentsUrl, includingPropertiesForKeys: nil, options: NSDirectoryEnumerationOptions.SkipsSubdirectoryDescendants, error: nil) {
-            //println(directoryUrls)
-        }
-    }
     
     //MARK: mapView delegate methods
     
@@ -77,28 +68,12 @@ class TravelLocationsMapView: UIViewController, MKMapViewDelegate {
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
-//    func mapView(mapView: MKMapView!, didDeselectAnnotationView view: MKAnnotationView!) {
-//        println("deselected \(view.annotation.coordinate.latitude)")
-//        
-//    }
-    
-    
     func mapView(mapView: MKMapView!, regionDidChangeAnimated animated: Bool) {
         saveMapRegion()
-        println("saveMapRegion()")
     }
     
     
     @IBAction func handleLongPress(sender: UILongPressGestureRecognizer) {
-        //println("Long tap detected!")
-        
-//        let touchPoint = sender.locationInView(self.mapView)
-//        let mapLocation = mapView.convertPoint(touchPoint, toCoordinateFromView: self.mapView)
-//        
-//        let newAnnotation = MKPointAnnotation()
-//        newAnnotation.coordinate = mapLocation
-//        mapView.addAnnotation(newAnnotation)
-        
         switch sender.state {
         case .Changed: fallthrough
         case .Ended:
@@ -109,7 +84,9 @@ class TravelLocationsMapView: UIViewController, MKMapViewDelegate {
             //let newAnnotation = MKPointAnnotation()
             let latitude = mapLocation.latitude
             let longitude = mapLocation.longitude
-            let newAnnotation = Pin(latitude: latitude, longitude: longitude)
+            let newAnnotation = Pin(latitude: latitude, longitude: longitude, context: sharedContext)
+            //var error = NSError()
+            sharedContext.save(nil)
             //let newAnnotation = MKPinAnnotationView()
             //newAnnotation.coordinate = mapLocation
             mapView.addAnnotation(newAnnotation)
