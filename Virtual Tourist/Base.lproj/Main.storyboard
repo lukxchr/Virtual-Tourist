@@ -129,9 +129,11 @@
                                             <action selector="newCollection:" destination="C4U-g3-oJg" id="wFy-9e-99c"/>
                                         </connections>
                                     </barButtonItem>
-                                    <barButtonItem title="Item" id="1Rg-aF-OeM">
+                                    <barButtonItem width="42" style="plain" systemItem="fixedSpace" id="u5a-2C-snU"/>
+                                    <barButtonItem title="Delete Pin" id="0He-4V-n4M">
+                                        <color key="tintColor" red="1" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
                                         <connections>
-                                            <action selector="re:" destination="C4U-g3-oJg" id="Ax5-V8-8ch"/>
+                                            <action selector="deleteCurrentPin:" destination="C4U-g3-oJg" id="h55-Nf-w1Z"/>
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="InX-BS-sEI"/>

@@ -95,6 +95,7 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDataSourc
         //delete current photos
         let pictures = self.pin.pictures
         for picture in pictures {
+            picture.image = nil
             sharedContext.deleteObject(picture)
         }
         sharedContext.save(nil)
@@ -110,6 +111,7 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDataSourc
             
             for picture in pictures {
                 picture.pin = self.pin
+                picture.image = nil
             }
             
             var error: NSError?
@@ -130,9 +132,19 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDataSourc
     }
     
     
-    @IBAction func re(sender: AnyObject) {
-        //println("first one in pictures array: \(self.pin?.pictures[0])")
-        collectionView.reloadData()
+    //delete pin and all photos
+    @IBAction func deleteCurrentPin(sender: UIBarButtonItem) {
+    
+        let pictures = self.pin.pictures
+        //setting image to nil deletes files
+        for picture in pictures {
+            picture.image = nil
+//            sharedContext.deleteObject(picture)
+        }
+        sharedContext.deleteObject(self.pin)
+        sharedContext.save(nil)
+        //self.presentingViewController?
+        self.navigationController?.popViewControllerAnimated(true)
     }
     
     
