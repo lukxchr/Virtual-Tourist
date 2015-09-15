@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import CoreData
 
-class PhotoCollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, PinDelegate
+class PhotoCollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate
 {
     
     var pin: Pin!
@@ -35,15 +35,9 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDataSourc
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        pin.delegate = self
     }
     
     // MARK: - UICollectionView
-    
-    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
-        return 1
-//        return self.fetchedResultsController.sections?.count ?? 0
-    }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return pin.pictures.count
@@ -51,39 +45,25 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDataSourc
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        
-        
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("PhotoCell", forIndexPath: indexPath) as! PhotoCell
-        
-      
         configureCell(cell, withPicture: pin.pictures[indexPath.indexAtPosition(1)])
-        
-        
         return cell
     }
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        println("selected cell at indexPath=\(indexPath)")
-        //collectionView.deleteItemsAtIndexPaths([indexPath])
-        //deleteCell(atIndex: indexPath)
-        self.countDocuments()
-        self.pin.removePicture(atIndexPath: indexPath)
-//        self.pin.pictures[indexPath.indexAtPosition(1)].image = nil
-//        self.pin.pictures.removeAtIndex(indexPath.indexAtPosition(1))
-        self.countDocuments()
+        let picture = self.pin.pictures[indexPath.indexAtPosition(1)]
+        picture.image = nil
+        //delete persisted picture
+        sharedContext.deleteObject(picture)
+        sharedContext.save(nil)
+        //delete cell with nice animation
+        collectionView.deleteItemsAtIndexPaths([indexPath])
     }
     
     
     // MARK: - Configure Cell
     
     func configureCell(cell: PhotoCell, withPicture picture: Picture) {
-        
-//        println("configureCell thr_m: \(NSThread.isMainThread())")
-    
-        
-//        cell.imageView.image = UIImage.imageWithColor(UIColor.grayColor())
-        
-        
         if let localImage = picture.image {
             cell.imageView.image = localImage
         }
@@ -107,30 +87,43 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDataSourc
           
             }
             cell.requestToCancel = request
-
         }
-        
-        
-//        cell.imageView.image = UIImage.imageWithColor(UIColor.blackColor())
-        
     }
-    
     
     @IBAction func newCollection(sender: UIBarButtonItem) {
         
-        //self.pin.pictures = [Picture]()
-        //self.collectionView.reloadData()
-        //println("_newCollection_: \(NSThread.currentThread())")
+        //delete current photos
+        let pictures = self.pin.pictures
+        for picture in pictures {
+            sharedContext.deleteObject(picture)
+        }
+        sharedContext.save(nil)
         
-        FlickrAPIClient.sharedInstance.getPhotosForCoordinate(latitude: self.pin.latitude, longitude: self.pin.longitude) {
+        //get new photos
+        let latitude = Double(self.pin.latitude)
+        let longitude = Double(self.pin.longitude)
+        FlickrAPIClient.sharedInstance.getPhotosForCoordinate(latitude: latitude, longitude: longitude) {
             (urls, error) in
-            let pictures = urls.map({Picture(downloadURL: $0, context: self.sharedContext)})
-            self.pin.setPicturesArray(pictures)
-            //self.collectionView.reloadData()
             
+            let pictures = urls.map({Picture(downloadURL: $0, context: self.sharedContext)})
+            println("\(pictures.count) pictures for this pin")
+            
+            for picture in pictures {
+                picture.pin = self.pin
+            }
+            
+            var error: NSError?
+            self.sharedContext.save(&error)
+            if error != nil {
+                println("Error while adding pin")
+            }
+            
+            self.collectionView.reloadData()
         }
     }
     
+  
+    //MARK: debug
     func pin(pin: Pin, didUpdatePictures pictures: [Picture]) {
         self.collectionView.reloadData()
         println("didUpdatePictures delegate method called")
@@ -138,7 +131,7 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDataSourc
     
     
     @IBAction func re(sender: AnyObject) {
-        println("first one in pictures array: \(self.pin?.pictures[0])")
+        //println("first one in pictures array: \(self.pin?.pictures[0])")
         collectionView.reloadData()
     }
     

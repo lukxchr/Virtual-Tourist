@@ -10,12 +10,7 @@ import UIKit
 import MapKit
 import CoreData
 
-
-
-
 class TravelLocationsMapView: UIViewController, MKMapViewDelegate {
-    
-    
     @IBOutlet weak var mapView: MKMapView!
     
     var sharedContext: NSManagedObjectContext {
@@ -27,16 +22,8 @@ class TravelLocationsMapView: UIViewController, MKMapViewDelegate {
         mapView.delegate = self
         loadMapRegion()
         self.navigationController?.setNavigationBarHidden(true, animated: true)
-        
-        
-        //MARK: next line throws an exception (alternatively comment next 2 lines out and try droping a pin on the map (long press))
-//        2015-09-13 20:40:28.712 Virtual Tourist[8637:47192] *** Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: 'Unacceptable type of value for attribute: property = "longitude"; desired type = NSNumber; given type = __NSCFString; value = latitude.'
-        let pin1 = Pin(latitude: 40.744, longitude: -74.0517, context: sharedContext)
-        mapView.addAnnotation(pin1)
-        
-        
-        
-        }
+        fetchPins()
+    }
     
     //MARK: mapView delegate methods
     
@@ -57,7 +44,6 @@ class TravelLocationsMapView: UIViewController, MKMapViewDelegate {
         return nil
     }
 
-    
     func mapView(mapView: MKMapView!, didSelectAnnotationView view: MKAnnotationView!) {
         //deselct so that this method gets called again if user goes back from photo collection
         //and clicks on the same annotation view
@@ -77,33 +63,22 @@ class TravelLocationsMapView: UIViewController, MKMapViewDelegate {
         switch sender.state {
         case .Changed: fallthrough
         case .Ended:
-            //println("_Long tap detected!")
             let touchPoint = sender.locationInView(self.mapView)
             let mapLocation = mapView.convertPoint(touchPoint, toCoordinateFromView: self.mapView)
-            
-            //let newAnnotation = MKPointAnnotation()
             let latitude = mapLocation.latitude
             let longitude = mapLocation.longitude
-            let newAnnotation = Pin(latitude: latitude, longitude: longitude, context: sharedContext)
-            //var error = NSError()
-            sharedContext.save(nil)
-            //let newAnnotation = MKPinAnnotationView()
-            //newAnnotation.coordinate = mapLocation
-            mapView.addAnnotation(newAnnotation)
+            addPin(latitude: latitude, longitude: longitude)
         default: break
         }
-        
     }
     
     private func saveMapRegion() {
         let region = mapView.region
-        
         let centerLatitude = region.center.latitude as Double
         let centerLongitude = region.center.longitude as Double
         let latitudeDelta = region.span.latitudeDelta as Double
         let longitudeDelta = region.span.longitudeDelta as Double
         
-        //let defaults = NSUserDefaults.standardUserDefaults().defaults //setFloat(22.5 forKey: “myValue”)
         NSUserDefaults.standardUserDefaults().setDouble(centerLatitude, forKey: "centerLatitude")
         NSUserDefaults.standardUserDefaults().setDouble(centerLongitude, forKey: "centerLongitude")
         NSUserDefaults.standardUserDefaults().setDouble(latitudeDelta, forKey: "latitudeDelta")
@@ -124,13 +99,50 @@ class TravelLocationsMapView: UIViewController, MKMapViewDelegate {
         }
     }
     
+    private func addPin(#latitude: Double, longitude: Double) {
+        let pin = Pin(latitude: latitude, longitude: longitude, context: sharedContext)
+        mapView.addAnnotation(pin)
+        
+        FlickrAPIClient.sharedInstance.getPhotosForCoordinate(latitude: latitude, longitude: longitude) {
+                (urls, error) in
+            let pictures = urls.map({Picture(downloadURL: $0, context: self.sharedContext)})
+            println("\(pictures.count) pictures for this pin")
+            
+            for picture in pictures {
+                picture.pin = pin
+            }
+            
+            var error: NSError?
+            self.sharedContext.save(&error)
+            if error != nil {
+                println("Error while adding pin")
+            }
+        }
+    }
+    
+    private func fetchPins() {
+        let request = NSFetchRequest(entityName: "Pin")
+        var error: NSError?
+        let pins = sharedContext.executeFetchRequest(request, error: &error) as! [Pin]
+        
+        println("Fetched \(pins.count) pins")
+        
+        mapView.addAnnotations(pins)
+        if error != nil {
+            println("Error while fetching pins")
+        }
+        
+        
+        let req = NSFetchRequest(entityName: "Picture")
+        let pics = sharedContext.executeFetchRequest(req, error: nil)
+        println("# all pics fetched: \(pics?.count)")
+    }
+    
     
     @IBAction func del(sender: AnyObject) {
-//        NSFileManager.defaultManager().removeItemAtPath(path, error: nil)
         
         let documentsUrl =  NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0] as! NSURL
         
-        // now lets get the directory contents (including folders)
         if let directoryContents =  NSFileManager.defaultManager().contentsOfDirectoryAtPath(documentsUrl.path!, error: nil) {
             println("documents count: \(directoryContents.count)")
         }

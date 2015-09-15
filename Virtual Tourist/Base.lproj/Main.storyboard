@@ -163,6 +163,64 @@
             </objects>
             <point key="canvasLocation" x="736" y="374"/>
         </scene>
+        <!--DebugVC-->
+        <scene sceneID="mav-Jf-zaf">
+            <objects>
+                <viewController id="H4d-Jh-yvx" customClass="DebugVC" customModule="Virtual_Tourist" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="LCk-Rq-W3Y"/>
+                        <viewControllerLayoutGuide type="bottom" id="z6D-Ah-5qw"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="ER8-1l-fmA">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fTn-Ri-seH">
+                                <rect key="frame" x="0.0" y="-8" width="600" height="600"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c7e-AA-NSP">
+                                <rect key="frame" x="277" y="285" width="46" height="30"/>
+                                <state key="normal" title="Button">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="add:" destination="H4d-Jh-yvx" eventType="touchUpInside" id="cfT-XQ-U1k"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ymj-aC-ZAI">
+                                <rect key="frame" x="285" y="318" width="30" height="30"/>
+                                <state key="normal" title="load">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="load:" destination="H4d-Jh-yvx" eventType="touchUpInside" id="2rB-m9-BE1"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="fTn-Ri-seH" secondAttribute="trailing" id="58q-Tt-Ckb"/>
+                            <constraint firstAttribute="centerX" secondItem="c7e-AA-NSP" secondAttribute="centerX" id="8Qb-Vb-2gv"/>
+                            <constraint firstItem="fTn-Ri-seH" firstAttribute="leading" secondItem="ER8-1l-fmA" secondAttribute="leading" id="8r3-r8-22g"/>
+                            <constraint firstItem="z6D-Ah-5qw" firstAttribute="top" secondItem="fTn-Ri-seH" secondAttribute="bottom" constant="8" symbolic="YES" id="HnM-U6-Nyz"/>
+                            <constraint firstAttribute="centerY" secondItem="c7e-AA-NSP" secondAttribute="centerY" id="IQA-sH-Ub0"/>
+                            <constraint firstItem="ymj-aC-ZAI" firstAttribute="centerX" secondItem="fTn-Ri-seH" secondAttribute="centerX" id="PFg-eC-rz4"/>
+                            <constraint firstItem="fTn-Ri-seH" firstAttribute="top" secondItem="ER8-1l-fmA" secondAttribute="topMargin" constant="-8" id="Wad-7i-jfJ"/>
+                            <constraint firstItem="ymj-aC-ZAI" firstAttribute="top" secondItem="c7e-AA-NSP" secondAttribute="bottom" constant="3" id="kMb-Q1-DQB"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="textArea" destination="fTn-Ri-seH" id="Q1m-Bb-Xje"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="iNi-sZ-SBt" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2817" y="180"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="qVu-Lp-j4c">
             <objects>

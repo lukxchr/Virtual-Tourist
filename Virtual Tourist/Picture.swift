@@ -48,9 +48,6 @@ class Picture: NSManagedObject, Printable {
         return ""
     }
     
-//    var description: String {
-//        return imagePath ?? "no path"
-//    }
     
     
     var image: UIImage? {

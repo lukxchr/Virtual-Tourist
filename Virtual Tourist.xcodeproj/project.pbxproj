@@ -18,6 +18,8 @@
 		4B38E8A51B80E4FE00F8E4E5 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B38E8A41B80E4FE00F8E4E5 /* Images.xcassets */; };
 		4B38E8A81B80E4FE00F8E4E5 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B38E8A61B80E4FE00F8E4E5 /* LaunchScreen.xib */; };
 		4B38E8B41B80E50200F8E4E5 /* Virtual_TouristTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B38E8B31B80E50200F8E4E5 /* Virtual_TouristTests.swift */; };
+		4B3E50F81BA6D23900A6CE1E /* DE1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B3E50F71BA6D23900A6CE1E /* DE1.swift */; };
+		4B3E50FA1BA6D38700A6CE1E /* DebugVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B3E50F91BA6D38700A6CE1E /* DebugVC.swift */; };
 		4B42AFFD1B93615E00B263A0 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4B42AFFB1B93615E00B263A0 /* Model.xcdatamodeld */; };
 		4B42AFFF1B9363B100B263A0 /* CoreDataStackManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B42AFFE1B9363B100B263A0 /* CoreDataStackManager.swift */; };
 		4BB5C3B61B8C4E050020F3B0 /* Picture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BB5C3B51B8C4E050020F3B0 /* Picture.swift */; };
@@ -50,6 +52,8 @@
 		4B38E8AD1B80E50100F8E4E5 /* Virtual TouristTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Virtual TouristTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B38E8B21B80E50200F8E4E5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4B38E8B31B80E50200F8E4E5 /* Virtual_TouristTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Virtual_TouristTests.swift; sourceTree = "<group>"; };
+		4B3E50F71BA6D23900A6CE1E /* DE1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DE1.swift; sourceTree = "<group>"; };
+		4B3E50F91BA6D38700A6CE1E /* DebugVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DebugVC.swift; sourceTree = "<group>"; };
 		4B42AFFC1B93615E00B263A0 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		4B42AFFE1B9363B100B263A0 /* CoreDataStackManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStackManager.swift; sourceTree = "<group>"; };
 		4BB5C3B51B8C4E050020F3B0 /* Picture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Picture.swift; sourceTree = "<group>"; };
@@ -97,6 +101,7 @@
 				4B42AFFE1B9363B100B263A0 /* CoreDataStackManager.swift */,
 				4B36E2E11B81D11100A4294E /* Pin.swift */,
 				4BB5C3B51B8C4E050020F3B0 /* Picture.swift */,
+				4B3E50F71BA6D23900A6CE1E /* DE1.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -131,6 +136,7 @@
 				4B38E89B1B80E4FB00F8E4E5 /* Supporting Files */,
 				4BB5C3B91B8E0AE80020F3B0 /* PhotoCell.swift */,
 				4B36E2E81B833E6800A4294E /* Utils.swift */,
+				4B3E50F91BA6D38700A6CE1E /* DebugVC.swift */,
 			);
 			path = "Virtual Tourist";
 			sourceTree = "<group>";
@@ -327,7 +333,9 @@
 				4B42AFFF1B9363B100B263A0 /* CoreDataStackManager.swift in Sources */,
 				4B36E2E71B81E11300A4294E /* FlickrAPIClient.swift in Sources */,
 				4BB5C3B81B8C83780020F3B0 /* ImageCache.swift in Sources */,
+				4B3E50FA1BA6D38700A6CE1E /* DebugVC.swift in Sources */,
 				4B36E2E91B833E6800A4294E /* Utils.swift in Sources */,
+				4B3E50F81BA6D23900A6CE1E /* DE1.swift in Sources */,
 				4BB5C3B61B8C4E050020F3B0 /* Picture.swift in Sources */,
 				4BB5C3BA1B8E0AE80020F3B0 /* PhotoCell.swift in Sources */,
 				4B42AFFD1B93615E00B263A0 /* Model.xcdatamodeld in Sources */,
