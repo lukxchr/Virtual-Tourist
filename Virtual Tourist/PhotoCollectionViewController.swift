@@ -22,6 +22,8 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDataSourc
     
     @IBOutlet weak var collectionView: UICollectionView!
     
+    //set in viewDidLoad; reloads collectionView, deals with a situtation when user drops a new pin a clicks on it i.e. moves to corresponding photo collection view before urls of pictures for given location are downloaded
+    var reloadTimer: NSTimer?
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
@@ -31,10 +33,12 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDataSourc
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
+        reloadTimer?.invalidate()
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        reloadTimer = NSTimer.scheduledTimerWithTimeInterval(0.5, target: self, selector: "reload", userInfo: nil, repeats: true)
     }
     
     // MARK: - UICollectionView
@@ -107,7 +111,7 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDataSourc
             (urls, error) in
             
             let pictures = urls.map({Picture(downloadURL: $0, context: self.sharedContext)})
-            println("\(pictures.count) pictures for this pin")
+            //println("\(pictures.count) pictures for this pin")
             
             for picture in pictures {
                 picture.pin = self.pin
@@ -124,27 +128,26 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDataSourc
         }
     }
     
-  
-    //MARK: debug
-    func pin(pin: Pin, didUpdatePictures pictures: [Picture]) {
-        self.collectionView.reloadData()
-        println("didUpdatePictures delegate method called")
-    }
-    
-    
     //delete pin and all photos
     @IBAction func deleteCurrentPin(sender: UIBarButtonItem) {
     
         let pictures = self.pin.pictures
-        //setting image to nil deletes files
+        //setting image to nil deletes file
         for picture in pictures {
             picture.image = nil
-//            sharedContext.deleteObject(picture)
         }
+        //delete pin and all associates Pictures from CoreData        
         sharedContext.deleteObject(self.pin)
         sharedContext.save(nil)
-        //self.presentingViewController?
         self.navigationController?.popViewControllerAnimated(true)
+    }
+    
+    func reload() {
+        collectionView.reloadData()
+        //no need to keep reloading if already loaded pictures
+        if !self.pin.pictures.isEmpty {
+            reloadTimer?.invalidate()
+        }
     }
     
     

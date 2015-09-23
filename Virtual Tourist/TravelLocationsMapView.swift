@@ -124,30 +124,10 @@ class TravelLocationsMapView: UIViewController, MKMapViewDelegate {
         let request = NSFetchRequest(entityName: "Pin")
         var error: NSError?
         let pins = sharedContext.executeFetchRequest(request, error: &error) as! [Pin]
-        
-        println("Fetched \(pins.count) pins")
-        
         mapView.addAnnotations(pins)
-        if error != nil {
-            println("Error while fetching pins")
-        }
-        
-        
-        let req = NSFetchRequest(entityName: "Picture")
-        let pics = sharedContext.executeFetchRequest(req, error: nil)
-        println("# all pics fetched: \(pics?.count)")
+   
+//        let req = NSFetchRequest(entityName: "Picture")
+//        let pics = sharedContext.executeFetchRequest(req, error: nil)
     }
-    
-    
-    @IBAction func del(sender: AnyObject) {
-        
-        let documentsUrl =  NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0] as! NSURL
-        
-        if let directoryContents =  NSFileManager.defaultManager().contentsOfDirectoryAtPath(documentsUrl.path!, error: nil) {
-            println("documents count: \(directoryContents.count)")
-        }
-    }
-    
-
 }
 

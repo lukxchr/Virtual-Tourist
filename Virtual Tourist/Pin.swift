@@ -27,7 +27,6 @@ class Pin: NSManagedObject, MKAnnotation {
         super.init(entity: entity, insertIntoManagedObjectContext: context)
     }
     
-    
     init(latitude: Double, longitude: Double, context: NSManagedObjectContext) {
         let entity =  NSEntityDescription.entityForName("Pin", inManagedObjectContext: context)!
         super.init(entity: entity,insertIntoManagedObjectContext: context)
@@ -35,12 +34,5 @@ class Pin: NSManagedObject, MKAnnotation {
         self.latitude = latitude
         self.longitude = longitude
     }
-    
-//    func setPicturesArray(pictures: [Picture]) {
-//        self.pictures = pictures
-//        delegate?.pin(self, didUpdatePictures: pictures)
-//    }
 }
-
-
 

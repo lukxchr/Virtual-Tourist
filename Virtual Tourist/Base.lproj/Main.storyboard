@@ -24,23 +24,12 @@
                                     <outletCollection property="gestureRecognizers" destination="PqK-b4-1bh" appends="YES" id="DEG-Jt-pVG"/>
                                 </connections>
                             </mapView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2h3-RA-nbI">
-                                <rect key="frame" x="538" y="562" width="46" height="30"/>
-                                <state key="normal" title="Button">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="del:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="hWF-YW-3zW"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
                         <constraints>
                             <constraint firstAttribute="trailingMargin" secondItem="xsJ-TU-WLg" secondAttribute="trailing" constant="-16" id="1v1-09-fGd"/>
                             <constraint firstItem="xsJ-TU-WLg" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="topMargin" id="LiF-9b-1Lc"/>
-                            <constraint firstItem="2h3-RA-nbI" firstAttribute="top" secondItem="xsJ-TU-WLg" secondAttribute="bottom" constant="-38" id="Qsm-jx-KYN"/>
-                            <constraint firstItem="2h3-RA-nbI" firstAttribute="leading" secondItem="xsJ-TU-WLg" secondAttribute="trailing" constant="-62" id="TM4-tj-4MO"/>
                             <constraint firstItem="xsJ-TU-WLg" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="-16" id="mQL-1S-4hG"/>
                             <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="xsJ-TU-WLg" secondAttribute="bottom" id="qdA-Yk-DoA"/>
                         </constraints>
@@ -75,7 +64,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ZzC-pc-fLb">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="556"/>
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="536.5"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="JmJ-OX-Cyx">
                                     <size key="itemSize" width="115" height="115"/>
@@ -122,32 +111,42 @@
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jK7-zT-HCU">
                                 <rect key="frame" x="0.0" y="556" width="600" height="44"/>
                                 <items>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="ykW-zz-MTh"/>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="dkY-9R-1HH"/>
                                     <barButtonItem title="New Collection" id="3Vt-zA-qAN">
                                         <color key="tintColor" red="1" green="0.40000000596046448" blue="0.40000000596046448" alpha="1" colorSpace="calibratedRGB"/>
                                         <connections>
                                             <action selector="newCollection:" destination="C4U-g3-oJg" id="wFy-9e-99c"/>
                                         </connections>
                                     </barButtonItem>
-                                    <barButtonItem width="42" style="plain" systemItem="fixedSpace" id="u5a-2C-snU"/>
+                                    <barButtonItem width="42" style="plain" systemItem="fixedSpace" id="Le7-Pi-157"/>
                                     <barButtonItem title="Delete Pin" id="0He-4V-n4M">
                                         <color key="tintColor" red="1" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
                                         <connections>
                                             <action selector="deleteCurrentPin:" destination="C4U-g3-oJg" id="h55-Nf-w1Z"/>
                                         </connections>
                                     </barButtonItem>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="InX-BS-sEI"/>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="PSC-Jq-Xm3"/>
                                 </items>
                             </toolbar>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap individual photos to delete them" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IdM-1f-MCo">
+                                <rect key="frame" x="0.0" y="535" width="600" height="20.5"/>
+                                <color key="backgroundColor" red="1" green="0.40000000596046448" blue="0.40000000596046448" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstAttribute="trailingMargin" secondItem="IdM-1f-MCo" secondAttribute="trailing" constant="-16" id="71L-vx-E9E"/>
                             <constraint firstItem="ZzC-pc-fLb" firstAttribute="leading" secondItem="x1A-cB-orl" secondAttribute="leadingMargin" constant="-16" id="7IM-r3-TYB"/>
                             <constraint firstItem="jK7-zT-HCU" firstAttribute="leading" secondItem="x1A-cB-orl" secondAttribute="leadingMargin" constant="-16" id="897-Ig-fRH"/>
                             <constraint firstAttribute="trailingMargin" secondItem="jK7-zT-HCU" secondAttribute="trailing" constant="-16" id="FY1-z1-R7F"/>
+                            <constraint firstItem="IdM-1f-MCo" firstAttribute="top" secondItem="ZzC-pc-fLb" secondAttribute="bottom" constant="-1" id="GrA-Oe-8vk"/>
                             <constraint firstAttribute="trailingMargin" secondItem="ZzC-pc-fLb" secondAttribute="trailing" constant="-16" id="O34-Dm-WDQ"/>
+                            <constraint firstItem="IdM-1f-MCo" firstAttribute="leading" secondItem="x1A-cB-orl" secondAttribute="leadingMargin" constant="-16" id="T8a-ff-itX"/>
                             <constraint firstItem="ZzC-pc-fLb" firstAttribute="top" secondItem="x1A-cB-orl" secondAttribute="topMargin" id="TUm-6z-BIs"/>
-                            <constraint firstItem="jK7-zT-HCU" firstAttribute="top" secondItem="ZzC-pc-fLb" secondAttribute="bottom" id="i6t-b2-0O5"/>
+                            <constraint firstItem="jK7-zT-HCU" firstAttribute="top" secondItem="IdM-1f-MCo" secondAttribute="bottom" id="hry-8E-7EK"/>
                             <constraint firstItem="PAr-id-czs" firstAttribute="top" secondItem="jK7-zT-HCU" secondAttribute="bottom" id="owX-Cf-ycq"/>
                             <constraint firstItem="PAr-id-czs" firstAttribute="top" secondItem="ZzC-pc-fLb" secondAttribute="bottom" id="qnz-7i-8fw"/>
                         </constraints>
@@ -163,7 +162,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cpE-df-FiL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="736" y="374"/>
+            <point key="canvasLocation" x="503" y="332"/>
         </scene>
         <!--DebugVC-->
         <scene sceneID="mav-Jf-zaf">
